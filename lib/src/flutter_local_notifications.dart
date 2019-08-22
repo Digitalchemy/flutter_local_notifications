@@ -221,6 +221,7 @@ class FlutterLocalNotificationsPlugin {
             pendingNotification['id'],
             pendingNotification['title'],
             pendingNotification['body'],
+            pendingNotification['date'] == null ? null : DateTime.fromMillisecondsSinceEpoch(pendingNotification['date']),
             pendingNotification['payload']))
         .toList();
   }
