@@ -138,12 +138,17 @@ class FlutterLocalNotificationsPlugin {
   }
 
   /// Schedules a notification to be shown at the specified time with an optional payload that is passed through when a notification is tapped
+  /// The [androidAllowWhileIdle] parameter is Android-specific and determines if the notification should still be shown at the specified time
+  /// even when in a low-power idle mode.
   Future<void> schedule(int id, String title, String body,
       DateTime scheduledDate, NotificationDetails notificationDetails,
-      {String payload}) async {
+      {String payload, bool androidAllowWhileIdle = false}) async {
     _validateId(id);
     var serializedPlatformSpecifics =
         _retrievePlatformSpecificNotificationDetails(notificationDetails);
+    if (_platform.isAndroid) {
+      serializedPlatformSpecifics['allowWhileIdle'] = androidAllowWhileIdle;
+    }
     await _channel.invokeMethod('schedule', <String, dynamic>{
       'id': id,
       'title': title,

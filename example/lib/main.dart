@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   PaddedRaisedButton(
                     buttonText:
-                        'Show plain notification with payload and update channel description',
+                        'Show plain notification with payload and update channel description [Android]',
                     onPressed: () async {
                       await _showNotificationWithUpdatedChannelDescription();
                     },
@@ -475,7 +475,8 @@ class _HomePageState extends State<HomePage> {
         'Please join us to celebrate the...',
         secondNotificationPlatformSpecifics);
 
-    // create the summary notification required for older devices that pre-date Android 7.0 (API level 24)
+    // create the summary notification to support older devices that pre-date Android 7.0 (API level 24).
+    // this is required is regardless of which versions of Android your application is going to support
     var lines = List<String>();
     lines.add('Alex Faarborg  Check this out');
     lines.add('Jeff Chang    Launch Party');
@@ -689,24 +690,24 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(body),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                child: Text('Ok'),
-                onPressed: () async {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SecondScreen(payload),
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SecondScreen(payload),
+                ),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }
