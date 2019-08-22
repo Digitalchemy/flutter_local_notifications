@@ -307,18 +307,24 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         }
     }
 
-    private static void saveScheduledNotification(Context context, NotificationDetails notificationDetails) {
-        ArrayList<NotificationDetails> scheduledNotifications = loadScheduledNotifications(context);
-        ArrayList<NotificationDetails> scheduledNotificationsToSave = new ArrayList<>();
-        for (NotificationDetails scheduledNotification : scheduledNotifications) {
-            if (scheduledNotification.id == notificationDetails.id) {
-                continue;
-            }
-            scheduledNotificationsToSave.add(scheduledNotification);
-        }
-        scheduledNotificationsToSave.add(notificationDetails);
-        saveScheduledNotifications(context, scheduledNotificationsToSave);
-    }
+	private static void saveScheduledNotification(final Context context, final NotificationDetails notificationDetails) {
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... voids) {
+				ArrayList<NotificationDetails> scheduledNotifications = loadScheduledNotifications(context);
+				ArrayList<NotificationDetails> scheduledNotificationsToSave = new ArrayList<>();
+				for (NotificationDetails scheduledNotification : scheduledNotifications) {
+					if (scheduledNotification.id == notificationDetails.id) {
+						continue;
+					}
+					scheduledNotificationsToSave.add(scheduledNotification);
+				}
+				scheduledNotificationsToSave.add(notificationDetails);
+				saveScheduledNotifications(context, scheduledNotificationsToSave);
+				return null;
+			}
+		}.execute();
+	}
 
     private static int getDrawableResourceId(Context context, String name) {
         return context.getResources().getIdentifier(name, DRAWABLE, context.getPackageName());
@@ -654,50 +660,45 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
     }
 
     @Override
-    public void onMethodCall(final MethodCall call, final Result result) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                switch (call.method) {
-                    case INITIALIZE_METHOD: {
-                        // initializeHeadlessService(call, result);
-                        initialize(call, result);
-                        break;
-                    }
-                    case GET_NOTIFICATION_APP_LAUNCH_DETAILS_METHOD: {
-                        getNotificationAppLaunchDetails(result);
-                        break;
-                    }
-                    case SHOW_METHOD: {
-                        show(call, result);
-                        break;
-                    }
-                    case SCHEDULE_METHOD: {
-                        schedule(call, result);
-                        break;
-                    }
-                    case PERIODICALLY_SHOW_METHOD:
-                    case SHOW_DAILY_AT_TIME_METHOD:
-                    case SHOW_WEEKLY_AT_DAY_AND_TIME_METHOD: {
-                        repeat(call, result);
-                        break;
-                    }
-                    case CANCEL_METHOD:
-                        cancel(call, result);
-                        break;
-                    case CANCEL_ALL_METHOD:
-                        cancelAllNotifications(result);
-                        break;
-                    case PENDING_NOTIFICATION_REQUESTS_METHOD:
-                        pendingNotificationRequests(result);
-                        break;
-                    default:
-                        result.notImplemented();
-                        break;
-                }
-            }
-        });
-    }
+	public void onMethodCall(MethodCall call, Result result) {
+		switch (call.method) {
+			case INITIALIZE_METHOD: {
+				// initializeHeadlessService(call, result);
+				initialize(call, result);
+				break;
+			}
+			case GET_NOTIFICATION_APP_LAUNCH_DETAILS_METHOD: {
+				getNotificationAppLaunchDetails(result);
+				break;
+			}
+			case SHOW_METHOD: {
+				show(call, result);
+				break;
+			}
+			case SCHEDULE_METHOD: {
+				schedule(call, result);
+				break;
+			}
+			case PERIODICALLY_SHOW_METHOD:
+			case SHOW_DAILY_AT_TIME_METHOD:
+			case SHOW_WEEKLY_AT_DAY_AND_TIME_METHOD: {
+				repeat(call, result);
+				break;
+			}
+			case CANCEL_METHOD:
+				cancel(call, result);
+				break;
+			case CANCEL_ALL_METHOD:
+				cancelAllNotifications(result);
+				break;
+			case PENDING_NOTIFICATION_REQUESTS_METHOD:
+				pendingNotificationRequests(result);
+				break;
+			default:
+				result.notImplemented();
+				break;
+		}
+	}
 
     private void pendingNotificationRequests(Result result) {
         ArrayList<NotificationDetails> scheduledNotifications = loadScheduledNotifications(registrar.context());
