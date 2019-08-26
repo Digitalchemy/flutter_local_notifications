@@ -661,6 +661,7 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
             pendingNotification.put("id", scheduledNotification.id);
             pendingNotification.put("title", scheduledNotification.title);
             pendingNotification.put("body", scheduledNotification.body);
+            pendingNotification.put("date", scheduledNotification.millisecondsSinceEpoch);
             pendingNotification.put("payload", scheduledNotification.payload);
             pendingNotifications.add(pendingNotification);
         }
