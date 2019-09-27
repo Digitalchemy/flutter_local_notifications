@@ -206,16 +206,22 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
         FlutterLocalNotificationsPlugin plugin = new FlutterLocalNotificationsPlugin(registrar);
     }
 
-    public static void removeNotificationFromCache(Integer notificationId, Context context) {
-        ArrayList<NotificationDetails> scheduledNotifications = loadScheduledNotifications(context);
-        for (Iterator<NotificationDetails> it = scheduledNotifications.iterator(); it.hasNext(); ) {
-            NotificationDetails notificationDetails = it.next();
-            if (notificationDetails.id.equals(notificationId)) {
-                it.remove();
-                break;
-            }
-        }
-        saveScheduledNotifications(context, scheduledNotifications);
+    public static void removeNotificationFromCache(final Integer notificationId, final Context context) {
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... voids) {
+				ArrayList<NotificationDetails> scheduledNotifications = loadScheduledNotifications(context);
+				for (Iterator<NotificationDetails> it = scheduledNotifications.iterator(); it.hasNext(); ) {
+					NotificationDetails notificationDetails = it.next();
+					if (notificationDetails.id.equals(notificationId)) {
+						it.remove();
+						break;
+					}
+				}
+				saveScheduledNotifications(context, scheduledNotifications);
+				return null;
+			}
+		}.execute();
     }
 
     @SuppressWarnings("deprecation")
