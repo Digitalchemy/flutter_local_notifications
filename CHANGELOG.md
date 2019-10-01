@@ -1,3 +1,10 @@
+# [0.8.3]
+* [Android] Changed intents to use the `FLAG_UPDATE_CURRENT` flag instead of `FLAG_CANCEL_CURRENT` as alarms weren't being cleared out properly when updating or cancel a notification. Thanks to [WJQ](https://github.com/jjs1015) for submitting the PR to address the cancellation issue
+
+# [0.8.2+1]
+* Remove `ScheduledAndroidNotificationPrecision` enum that wasn't being used
+* Update readme around approach used to develop the plugin
+
 # [0.8.2]
 * [iOS] Fix issue [295](https://github.com/MaikuB/flutter_local_notifications/issues/295) where `onSelectNotification` callback wasn't trigger when a notification had been tapped on whilst the app was terminated
 
