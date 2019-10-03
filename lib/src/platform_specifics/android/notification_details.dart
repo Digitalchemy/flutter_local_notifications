@@ -104,6 +104,9 @@ class AndroidNotificationDetails {
   /// The action to take for managing notification channels. Defaults to creating the notification channel using the provided details if it doesn't exist
   AndroidNotificationChannelAction channelAction;
 
+  ///
+  String smallIcon;
+
   AndroidNotificationDetails(
       this.channelId, this.channelName, this.channelDescription,
       {this.icon,
@@ -134,7 +137,8 @@ class AndroidNotificationDetails {
       this.ledColor,
       this.ledOnMs,
       this.ledOffMs,
-      this.ticker});
+      this.ticker,
+      this.smallIcon});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -177,7 +181,8 @@ class AndroidNotificationDetails {
       'ledColorBlue': ledColor?.blue,
       'ledOnMs': ledOnMs,
       'ledOffMs': ledOffMs,
-      'ticker': ticker
+      'ticker': ticker,
+      'small_icon': smallIcon,
     };
   }
 }
