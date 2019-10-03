@@ -99,6 +99,8 @@ public class NotificationDetails {
     public static final String TICKER = "ticker";
     public static final String ALLOW_WHILE_IDLE = "allowWhileIdle";
 
+    public static final String SMALL_ICON = "small_icon";
+
     public Integer id;
     public String title;
     public String body;
@@ -141,6 +143,7 @@ public class NotificationDetails {
     public Integer ledOffMs;
     public String ticker;
     public Boolean allowWhileIdle;
+    public String smallIcon;
 
 
     // Note: this is set on the Android to save details about the icon that should be used when re-hydrating scheduled notifications when a device has been restarted.
@@ -211,6 +214,10 @@ public class NotificationDetails {
             }
             notificationDetails.ticker = (String) platformChannelSpecifics.get(TICKER);
             notificationDetails.allowWhileIdle = (Boolean) platformChannelSpecifics.get(ALLOW_WHILE_IDLE);
+
+			if (platformChannelSpecifics.containsKey(SMALL_ICON)) {
+				notificationDetails.smallIcon = (String) platformChannelSpecifics.get(SMALL_ICON);
+			}
         }
         return notificationDetails;
     }

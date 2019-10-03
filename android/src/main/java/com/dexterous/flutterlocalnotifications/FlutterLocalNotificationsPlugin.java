@@ -137,6 +137,10 @@ public class FlutterLocalNotificationsPlugin implements MethodCallHandler, Plugi
             builder.setColor(notificationDetails.color.intValue());
         }
 
+        if (!StringUtils.isNullOrEmpty(notificationDetails.smallIcon)) {
+			builder.setSmallIcon(getDrawableResourceId(context, notificationDetails.smallIcon));
+		}
+
         applyGrouping(notificationDetails, builder);
         setSound(context, notificationDetails, builder);
         setVibrationPattern(notificationDetails, builder);
